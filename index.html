@@ -198,6 +198,9 @@
 
   @media (max-width: 600px) {
     .scrolly { height: 200vh; }
+    .links { gap: 11px; font-size: .78rem; }
+    .logo { gap: 7px; }
+    .logo-name { font-size: 1.15rem; }
     #work { margin-top: -38vh; padding-top: 10vh; }
     .frame { width: 26vh; height: 16vh; }
     .s1 { top: 12vh; } .s2 { top: 50vh; }
@@ -362,7 +365,7 @@
   /* ---------- RESPONSIVE ---------- */
   @media (max-width: 900px) {
     .nav-in > .btn { display: none; }
-    .links { gap: 16px; font-size: .85rem; }
+    .links { gap: 16px; font-size: .85rem; white-space: nowrap; }
     .card, .card.wide { grid-column: span 6; }
     .card.wide .thumb { aspect-ratio: 16/10; height: auto; }
     .about { grid-template-columns: 1fr; gap: 40px; }
@@ -661,7 +664,7 @@ TRACKS.forEach((t, ti) => {
 /* hero video scrub */
 if (HERO_VIDEO) {
   // load as a blob so the video is always seekable for scroll-scrubbing
-  fetch(HERO_VIDEO).then(r => r.blob()).then(b => { heroVideo.src = URL.createObjectURL(b); })
+  fetch(HERO_VIDEO).then(r => r.blob()).then(b => { heroVideo.src = URL.createObjectURL(b); heroVideo.load(); })
     .catch(() => { heroVideo.src = HERO_VIDEO; });
   heroVideo.style.display = "block";
   document.getElementById("strips").style.display = "none";
@@ -730,6 +733,12 @@ function render(p) {
 
   if (HERO_VIDEO && heroVideo.duration) seekVideo(p * (heroVideo.duration - .05));
 }
+/* iOS/Android only paint seeked frames after the video has played once: prime it silently */
+heroVideo.addEventListener("loadeddata", () => {
+  const pr = heroVideo.play();
+  if (pr) pr.then(() => { heroVideo.pause(); seekVideo(cur * (heroVideo.duration - .05)); }).catch(() => {});
+}, { once: true });
+
 /* never queue seeks: while the decoder is busy, keep only the latest wanted time */
 let seekBusy = false, seekWanted = null;
 function seekVideo(t) {
