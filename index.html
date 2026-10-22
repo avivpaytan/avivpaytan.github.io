@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PATAN SHOOT | עריכת וידאו</title>
+<title>PAYTAN SHOOT | עריכת וידאו</title>
 <meta name="description" content="עריכת וידאו לפרסומות, קליפים, תוכן לרשתות ואירועים.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,7 +21,7 @@
     --max: 1240px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; overflow-x: hidden; }
+  html { scroll-behavior: smooth; }
   html, body { overflow-x: clip; max-width: 100%; }
   body {
     background: var(--bg);
@@ -29,7 +29,6 @@
     font-family: "Heebo", system-ui, sans-serif;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
   }
   a { color: inherit; text-decoration: none; }
   img, video, iframe { display: block; max-width: 100%; }
@@ -64,13 +63,50 @@
   .logo-name.off { opacity: 0; }
 
   /* ---------- SCROLL HERO ---------- */
-  .scrolly { height: 380vh; position: relative; }
-  .stage { position: sticky; top: 0; height: 100vh; overflow: hidden; }
+  .scrolly { height: 270vh; position: relative; }
+  .stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+  /* works section rises over the end of the pinned hero */
+  #work { position: relative; z-index: 6; margin-top: -45vh; padding-top: 12vh; background: linear-gradient(to bottom, transparent 0, var(--bg) 12vh); }
   .stage::before {
     content: ""; position: absolute; inset: 0;
     background: radial-gradient(60% 50% at 50% 45%, rgba(255,77,46,.16), transparent 70%);
   }
-  #heroVideo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: none; }
+  #heroVideo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 57% 50%; display: none; filter: brightness(.62); }
+  /* bubble / glossy lettering */
+  .bigname span, .bigname b {
+    font-weight: 400; color: transparent; -webkit-background-clip: text; background-clip: text;
+    -webkit-text-stroke: 1px rgba(255,255,255,.25);
+    filter: drop-shadow(0 4px 0 rgba(0,0,0,.45)) drop-shadow(0 16px 30px rgba(0,0,0,.65));
+  }
+  .bigname span {
+    background-image:
+      radial-gradient(ellipse 60% 22% at 50% 18%, rgba(255,255,255,.95), transparent 70%),
+      linear-gradient(180deg, #ffffff 0%, #e9e7e1 42%, #8f8d86 52%, #d9d7d0 78%, #ffffff 100%);
+  }
+  .bigname b {
+    background-image:
+      radial-gradient(ellipse 60% 22% at 50% 18%, rgba(255,230,220,.95), transparent 70%),
+      linear-gradient(180deg, #ffb39f 0%, #ff4d2e 42%, #b5260f 52%, #ff6a4a 78%, #ffc2b2 100%);
+  }
+  .hero-bg {
+    position: absolute; inset: 0; overflow: hidden; filter: brightness(.62);
+  }
+  /* static editing-room photo; only the tracks layer scrubs past the playhead */
+  .tl { position: absolute; background: url("hero-timeline.jpg") 0 0 / 100% 100% no-repeat; }
+  .tl-tracks {
+    position: absolute; left: 14.88%; top: 27.26%; width: 79.24%; height: 51.2%;
+    background: url("hero-tracks.jpg") 0 0 / auto 100% repeat-x; will-change: background-position;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  }
+  .tl-head {
+    position: absolute; left: 57.3%; top: 25.5%; height: 53.6%; width: 3px; border-radius: 2px;
+    background: #ff6a3a; box-shadow: 0 0 8px 2px rgba(255,90,40,.9), 0 0 28px 6px rgba(255,77,46,.45);
+    transform: rotate(-5deg); transform-origin: top center;
+  }
+  /* the editing-timeline image replaces the film strips and the mock NLE */
+  .strips, .nle { display: none; }
+  .hint { bottom: 40px !important; }
   .strips { position: absolute; inset: 0; will-change: transform; }
   .strip { position: absolute; left: -15vw; direction: ltr; }
   .s1 { top: 9vh; transform: rotate(-7deg); }
@@ -98,18 +134,30 @@
   }
   .bigname {
     position: absolute; left: 50%; top: 36%; z-index: 5; direction: ltr; white-space: nowrap;
-    font-family: "Anton", sans-serif; font-size: clamp(64px, 16vw, 260px); line-height: .9; letter-spacing: .01em;
-    transform-origin: center; will-change: transform; text-shadow: 0 10px 50px rgba(0,0,0,.6);
+    font-family: "Anton", sans-serif; font-size: clamp(48px, 11vw, 180px); line-height: .9; letter-spacing: .01em;
+    transform-origin: center; will-change: transform;
   }
   .hero-copy {
-    position: absolute; left: 0; right: 0; top: calc(36% + min(8vw, 130px) + 12px); z-index: 5;
+    position: absolute; left: 0; right: 0; top: calc(36% + min(5.5vw, 90px) + 14px); z-index: 5;
     display: flex; flex-direction: column; align-items: center; gap: 22px; text-align: center; padding: 0 16px;
     opacity: 0;
   }
   .hero-copy .tag { font-size: clamp(1.1rem, 2.2vw, 1.6rem); color: var(--text); font-weight: 300; }
-  .hero-copy .tag b { color: var(--accent); font-weight: 700; }
+  .hero-copy .tag { position: relative; isolation: isolate; padding: 8px 14px; font-weight: 500; }
+  .hero-copy .tag b { color: #fff; font-weight: 900; position: relative; z-index: 0; padding: 0 6px; }
+  /* rough brush stroke behind the last word, revealed right-to-left with scroll */
+  .hero-copy .tag b::before {
+    content: ""; position: absolute; z-index: -1; left: -14px; right: -14px; top: -6px; bottom: -8px;
+    background: var(--accent); filter: url(#brush);
+    -webkit-mask-image:
+      linear-gradient(90deg, transparent 0, #000 6%, #000 92%, transparent 100%),
+      repeating-linear-gradient(0deg, #000 0 3px, rgba(0,0,0,.55) 3px 5px, #000 5px 9px, rgba(0,0,0,.75) 9px 10px);
+    -webkit-mask-composite: source-in; mask-composite: intersect;
+    clip-path: inset(0 0 0 calc((1 - var(--band, 0)) * 100%));
+    transform: rotate(-2deg);
+  }
   .hero-cta { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
-  .hint { position: absolute; bottom: 210px; left: 50%; transform: translateX(-50%); color: var(--muted); font-size: .75rem; z-index: 5; animation: bob 1.6s infinite; }
+  .hint { position: absolute; bottom: 210px; left: 50%; transform: translateX(-50%); color: #fff; font-family: "Heebo", sans-serif; font-weight: 900; font-size: clamp(1.1rem, 2vw, 1.4rem); white-space: nowrap; text-shadow: 0 2px 12px rgba(0,0,0,.7); z-index: 5; animation: bob 1.6s infinite; }
   @keyframes bob { 50% { transform: translate(-50%, 6px); } }
 
   /* NLE timeline */
@@ -149,6 +197,8 @@
   .nle-head::before { content: ""; position: absolute; top: 0; left: -6px; border: 7px solid transparent; border-top-color: var(--accent); }
 
   @media (max-width: 600px) {
+    .scrolly { height: 200vh; }
+    #work { margin-top: -38vh; padding-top: 10vh; }
     .frame { width: 26vh; height: 16vh; }
     .s1 { top: 12vh; } .s2 { top: 50vh; }
     .nle-top span:first-child, .nle-top span:last-child { display: none; }
@@ -311,7 +361,8 @@
 
   /* ---------- RESPONSIVE ---------- */
   @media (max-width: 900px) {
-    .links { display: none; }
+    .nav-in > .btn { display: none; }
+    .links { gap: 16px; font-size: .85rem; }
     .card, .card.wide { grid-column: span 6; }
     .card.wide .thumb { aspect-ratio: 16/10; height: auto; }
     .about { grid-template-columns: 1fr; gap: 40px; }
@@ -338,7 +389,7 @@
 <!-- ================= NAV ================= -->
 <nav id="nav">
   <div class="wrap nav-in">
-    <a href="#" class="logo"><span class="rec"></span><span class="logo-name off" id="logoName">PATAN <b>SHOOT</b></span></a>
+    <a href="#" class="logo"><span class="rec"></span><span class="logo-name off" id="logoName">PAYTAN <b>SHOOT</b></span></a>
     <div class="links">
       <a href="#work">עבודות</a>
       <a href="#services">שירותים</a>
@@ -353,26 +404,24 @@
 <header class="scrolly" id="hero">
   <div class="stage">
     <video id="heroVideo" muted playsinline preload="auto"></video>
+    <div class="hero-bg" id="heroBg" aria-hidden="true"><div class="tl" id="tl"><div class="tl-tracks" id="tlTracks"></div><div class="tl-head"></div></div></div>
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="brush"><feTurbulence type="fractalNoise" baseFrequency="0.04 0.9" numOctaves="3" seed="4"/><feDisplacementMap in="SourceGraphic" scale="9"/></filter></svg>
     <div class="strips" id="strips" aria-hidden="true">
       <div class="strip s1"><div class="strip-in" id="strip1"></div></div>
       <div class="strip s2"><div class="strip-in" id="strip2"></div></div>
     </div>
     <div class="vignette"></div>
 
-    <h1 class="bigname" id="bigName">PATAN <b>SHOOT</b></h1>
+    <h1 class="bigname" id="bigName"><span>PAYTAN</span> <b>SHOOT</b></h1>
 
     <div class="hero-copy" id="heroCopy">
-      <p class="tag">עריכת וידאו · כל פריים <b>מספר סיפור.</b></p>
-      <div class="hero-cta">
-        <a href="#work" class="btn">לעבודות שלי ←</a>
-        <a href="#reel" class="btn ghost">▶ שואוריל</a>
-      </div>
+      <p class="tag">יצירתיות. ייחודיות. <b>מקצועיות.</b></p>
     </div>
 
-    <div class="hint mono" id="hint">גלול למטה ↓</div>
+    <div class="hint" id="hint">גלול למטה ↓</div>
 
     <div class="nle" aria-hidden="true">
-      <div class="nle-top mono"><span>PATAN_SHOOT_REEL_v12</span><span class="nle-tc" id="heroTc">00:00:00:00</span><span>25 FPS · 4K</span></div>
+      <div class="nle-top mono"><span>PAYTAN_SHOOT_REEL_v12</span><span class="nle-tc" id="heroTc">00:00:00:00</span><span>25 FPS · 4K</span></div>
       <div class="nle-body">
         <div class="nle-labels mono"><span></span><span>V2</span><span>V1</span><span>A1</span><span>A2</span></div>
         <div class="nle-view" id="nleView">
@@ -384,23 +433,11 @@
   </div>
 </header>
 
-<!-- ================= SHOWREEL ================= -->
-<section id="reel">
-  <div class="wrap rv">
-    <div class="reel" id="reelBox">
-      <!-- להחלפה: וידאו השואוריל -->
-      <div class="play"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></div>
-      <div class="reel-label mono">SHOWREEL 2026</div>
-      <div class="reel-tc mono" id="tc">00:00:00:00</div>
-    </div>
-  </div>
-</section>
-
 <!-- ================= WORK ================= -->
-<section id="work" style="padding-top:0">
+<section id="work">
   <div class="wrap">
     <div class="head rv">
-      <div><span class="num mono">01 / עבודות נבחרות</span><h2>עבודות</h2></div>
+      <div><h2>עבודות</h2></div>
       <div class="filters" id="filters"></div>
     </div>
     <div class="grid" id="grid"></div>
@@ -415,7 +452,7 @@
 <!-- ================= SERVICES ================= -->
 <section id="services" class="services">
   <div class="wrap">
-    <div class="head rv"><div><span class="num mono">02 / מה אני עושה</span><h2>שירותים</h2></div></div>
+    <div class="head rv"><div><h2>שירותים</h2></div></div>
     <div class="svc-list">
       <div class="svc rv"><span class="n mono">01</span><h3>פרסומות</h3><p>סרטוני מותג וקמפיינים — מקונספט ועד גרסאות לכל פלטפורמה.</p></div>
       <div class="svc rv"><span class="n mono">02</span><h3>קליפים</h3><p>עריכה קצבית שמתחברת למוזיקה, עם אפקטים ומעברים שמרגישים טבעיים.</p></div>
@@ -434,7 +471,6 @@
       <div class="ph mono">PORTRAIT 4:5</div>
     </div>
     <div class="rv">
-      <span class="num mono">03 / אודות</span>
       <h2>נעים להכיר.</h2>
       <p>אני עורך וידאו עם ניסיון של שנים בעבודה עם מותגים, אמנים ויוצרי תוכן. אני מאמין שעריכה טובה היא כזו שלא מרגישים — רק את הרגש שהיא משאירה.</p>
       <div class="stats">
@@ -452,7 +488,6 @@
 <!-- ================= CONTACT ================= -->
 <section id="contact" class="contact">
   <div class="wrap rv">
-    <span class="num mono">04 / צור קשר</span>
     <h2><a href="mailto:hello@example.com">יש לך<br>פרויקט?</a></h2>
     <p>ספר לי מה אתה צריך ונבנה את זה יחד. מענה תוך 24 שעות.</p>
     <div class="socials">
@@ -465,7 +500,7 @@
 </section>
 
 <footer>
-  <div class="wrap"><span>© 2026 PATAN SHOOT</span><span class="mono">MADE FRAME BY FRAME</span></div>
+  <div class="wrap"><span>© 2026 PAYTAN SHOOT</span><span class="mono">MADE FRAME BY FRAME</span></div>
 </footer>
 
 <!-- ================= LIGHTBOX ================= -->
@@ -566,7 +601,6 @@ grid.addEventListener("click", e => {
   const w = WORKS[card.dataset.i];
   openLB(w.video, w.title, `${w.client} · ${w.cat} · ${w.year}`, w.size === "vertical");
 });
-document.getElementById("reelBox").addEventListener("click", () => openLB(SHOWREEL, "Showreel 2026", "PATAN SHOOT"));
 document.getElementById("lbClose").addEventListener("click", closeLB);
 lb.addEventListener("click", e => { if (e.target === lb) closeLB(); });
 addEventListener("keydown", e => { if (e.key === "Escape") closeLB(); });
@@ -579,7 +613,7 @@ document.getElementById("marquee").innerHTML = [...CLIENTS, ...CLIENTS, ...CLIEN
    HERO_VIDEO: קובץ mp4 שיתקדם עם הגלילה (במקום סרטי הצילום). למשל "videos/hero.mp4"
    FRAMES: תמונות מהעבודות שלך שיופיעו בתוך סרט הצילום (אפשר להשאיר ריק)
    ========================================================= */
-const HERO_VIDEO = "";
+const HERO_VIDEO = "hero.mp4";
 const FRAMES = [];
 
 const hero = document.getElementById("hero");
@@ -589,6 +623,8 @@ const heroCopy = document.getElementById("heroCopy"), hint = document.getElement
 const nleScroll = document.getElementById("nleScroll"), nleView = document.getElementById("nleView");
 const heroTc = document.getElementById("heroTc"), heroVideo = document.getElementById("heroVideo");
 const nav = document.getElementById("nav");
+const heroBg = document.getElementById("heroBg");
+const tl = document.getElementById("tl"), tlTracks = document.getElementById("tlTracks");
 
 /* film strip frames */
 const HUES = [18, 200, 280, 35, 170, 330, 220, 50, 190, 0, 260, 140];
@@ -624,13 +660,21 @@ TRACKS.forEach((t, ti) => {
 
 /* hero video scrub */
 if (HERO_VIDEO) {
-  heroVideo.src = HERO_VIDEO; heroVideo.style.display = "block";
+  // load as a blob so the video is always seekable for scroll-scrubbing
+  fetch(HERO_VIDEO).then(r => r.blob()).then(b => { heroVideo.src = URL.createObjectURL(b); })
+    .catch(() => { heroVideo.src = HERO_VIDEO; });
+  heroVideo.style.display = "block";
   document.getElementById("strips").style.display = "none";
+  heroBg.style.display = "none";
 }
 
 /* geometry for name move: nav-logo position -> center */
 let geo = {};
 function measure() {
+  // lay the timeline photo out like background-size: cover, anchored on the playhead
+  const sw = hero.firstElementChild.clientWidth, sh = hero.firstElementChild.clientHeight;
+  const sc = Math.max(sw / 1344, sh / 752), iw = 1344 * sc, ih = 752 * sc;
+  Object.assign(tl.style, { width: iw + "px", height: ih + "px", left: (sw - iw) * .573 + "px", top: (sh - ih) / 2 + "px" });
   const lr = logoName.getBoundingClientRect();
   const bigFs = parseFloat(getComputedStyle(bigName).fontSize);
   const logoFs = parseFloat(getComputedStyle(logoName).fontSize);
@@ -641,6 +685,7 @@ function measure() {
     dy: lr.top + lr.height / 2 - stage.height * .36,
     s1w: strip1.scrollWidth, s2w: strip2.scrollWidth,
     vw: innerWidth, nleW: nleView.clientWidth,
+    tileW: 1010 / 385 * ih * .512,
   };
 }
 
@@ -655,9 +700,15 @@ function heroProgress() {
 }
 function render(p) {
   // name: from nav logo to center, growing
-  const e = ease(clamp(p / .5));
-  const s = geo.s0 + (1 - geo.s0) * e;
+  // fast punch-in: done in the first ~12% of the scroll, with a small overshoot
+  const t = clamp(p / .3);
+  const e = 1 - Math.pow(1 - t, 4);
+  const back = 1 + 2.2 * Math.pow(t - 1, 3) + 1.2 * Math.pow(t - 1, 2);
+  const s = geo.s0 + (1 - geo.s0) * back;
   bigName.style.transform = `translate(-50%,-50%) translate(${geo.dx * (1 - e)}px, ${geo.dy * (1 - e)}px) scale(${s})`;
+
+  // background timeline image: slow push-in toward the playhead + slight pan
+  tlTracks.style.backgroundPositionX = `${-p * geo.tileW * 1.6}px`; // scrub the timeline
 
   // film strips travel in opposite directions
   strip1.style.transform = `translateX(${-p * (geo.s1w - geo.vw * 1.1)}px)`;
@@ -670,16 +721,29 @@ function render(p) {
   heroTc.textContent = `00:00:${pad(Math.floor(fr / 25))}:${pad(fr % 25)}`;
 
   // copy + hint
-  const c = clamp((p - .55) / .2);
+  const c = clamp((p - .14) / .12);
+  heroCopy.style.setProperty("--band", clamp((p - .3) / .3));
   heroCopy.style.opacity = c;
   heroCopy.style.transform = `translateY(${(1 - c) * 20}px)`;
   heroCopy.style.pointerEvents = c > .5 ? "auto" : "none";
   hint.style.opacity = 1 - clamp(p / .08);
 
-  if (HERO_VIDEO && heroVideo.duration) heroVideo.currentTime = p * (heroVideo.duration - .05);
+  if (HERO_VIDEO && heroVideo.duration) seekVideo(p * (heroVideo.duration - .05));
 }
+/* never queue seeks: while the decoder is busy, keep only the latest wanted time */
+let seekBusy = false, seekWanted = null;
+function seekVideo(t) {
+  if (seekBusy) { seekWanted = t; return; }
+  if (Math.abs(heroVideo.currentTime - t) < 1 / 50) return;
+  seekBusy = true; heroVideo.currentTime = t;
+}
+heroVideo.addEventListener("seeked", () => {
+  seekBusy = false;
+  if (seekWanted !== null) { const t = seekWanted; seekWanted = null; seekVideo(t); }
+});
+
 function loop() {
-  cur += (target - cur) * .14;
+  cur += (target - cur) * .12;
   if (Math.abs(target - cur) < .0005) cur = target;
   render(cur);
   running = cur !== target;
@@ -711,14 +775,6 @@ const io = new IntersectionObserver(entries => entries.forEach(en => {
   io.unobserve(en.target);
 }), { threshold: .15 });
 document.querySelectorAll(".rv").forEach(el => io.observe(el));
-
-/* ---------- running timecode on reel ---------- */
-const tc = document.getElementById("tc"); let f = 0;
-setInterval(() => {
-  f++; const fr = f % 25, s = Math.floor(f / 25) % 60, m = Math.floor(f / 1500) % 60;
-  const p = n => String(n).padStart(2, "0");
-  tc.textContent = `00:${p(m)}:${p(s)}:${p(fr)}`;
-}, 40);
 </script>
 </body>
 </html>
